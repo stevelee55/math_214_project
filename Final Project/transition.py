@@ -48,25 +48,26 @@ def fade(img_0, img_1, img_2, img_3, speed):
 		cv2.waitKey(5)
 
 def rotation(img_0, img_1, img_2, img_3, max_rotation_angle, speed):
-	for n in range(1, max_rotation_angle):
-		rows = img_0.shape[0]
-		cols = img_0.shape[1]
-		# Image 0
-		M_0 = cv2.getRotationMatrix2D((0,0),n,1)
-		img_trans_0 = cv2.warpAffine(img_0, M_0, (cols,rows))
-		# Image 1
-		M_1 = cv2.getRotationMatrix2D((0,0),n + 90,1)
-		img_trans_1 = cv2.warpAffine(img_1, M_1, (cols,rows))
-		# Image 2
-		M_2 = cv2.getRotationMatrix2D((0,0),n + 180,1)
-		img_trans_2 = cv2.warpAffine(img_2, M_2, (cols,rows))
-		# Image 3
-		M_3 = cv2.getRotationMatrix2D((0,0),n + 270,1)
-		img_trans_3 = cv2.warpAffine(img_3, M_3, (cols,rows))
+	while True:
+		for n in range(1, max_rotation_angle):
+			rows = img_0.shape[0]
+			cols = img_0.shape[1]
+			# Image 0
+			M_0 = cv2.getRotationMatrix2D((0,0),n,1)
+			img_trans_0 = cv2.warpAffine(img_0, M_0, (cols,rows))
+			# Image 1
+			M_1 = cv2.getRotationMatrix2D((0,0),n + 90,1)
+			img_trans_1 = cv2.warpAffine(img_1, M_1, (cols,rows))
+			# Image 2
+			M_2 = cv2.getRotationMatrix2D((0,0),n + 180,1)
+			img_trans_2 = cv2.warpAffine(img_2, M_2, (cols,rows))
+			# Image 3
+			M_3 = cv2.getRotationMatrix2D((0,0),n + 270,1)
+			img_trans_3 = cv2.warpAffine(img_3, M_3, (cols,rows))
 
-		# The key idea here is that images are rotated and they are added to combined them together.
-		cv2.imshow("test", img_trans_0 + img_trans_1 + img_trans_2 + img_trans_3)
-		cv2.waitKey(speed)
+			# The key idea here is that images are rotated and they are added to combined them together.
+			cv2.imshow("test", img_trans_0 + img_trans_1 + img_trans_2 + img_trans_3)
+			cv2.waitKey(speed)
 
 def scaling(img_0, img_1, img_2, img_3):
 	value = 150
@@ -196,9 +197,21 @@ def rotationScaling(img_0, img_1, img_2, img_3, max_rotation_angle, speed):
 			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
 			img_trans_0 = cv2.warpAffine(img_0, (n/max_rotation_angle) * M_0, (cols,rows))
 			cv2.imshow("test", img_trans_0)
-			cv2.waitKey(2)
+			cv2.waitKey(1)
 		for n in range(1, max_rotation_angle):
-			#new_n = max_rotation_angle - n
+			new_n = max_rotation_angle - n
+			# big = 1 - (n/max_rotation_angle)
+			# small = (n/max_rotation_angle)
+			# newImage = (big*img_0) + (small*img_1)
+			rows = img_0.shape[0]
+			cols = img_0.shape[1]
+			# Image 0
+			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
+			img_trans_0 = cv2.warpAffine(img_0, (new_n/max_rotation_angle) * M_0, (cols,rows))
+			cv2.imshow("test", img_trans_0)
+			cv2.waitKey(1)
+		for n in range(1, max_rotation_angle):
+			# new_n = max_rotation_angle - n
 			# big = 1 - (n/max_rotation_angle)
 			# small = (n/max_rotation_angle)
 			# newImage = (big*img_0) + (small*img_1)
@@ -208,52 +221,67 @@ def rotationScaling(img_0, img_1, img_2, img_3, max_rotation_angle, speed):
 			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
 			img_trans_0 = cv2.warpAffine(img_1, (n/max_rotation_angle) * M_0, (cols,rows))
 			cv2.imshow("test", img_trans_0)
-			cv2.waitKey(2)
-
-
-		# for n in range(1, value):
-		# 	#new_n = value - n
-		# 	width = img_0.shape[0]
-		# 	height = img_0.shape[1]
-		# 	M = numpy.array([[1.0, 0, 0],[0, 1.0, 0]])
-		# 	img = cv2.warpAffine(img_1, (n/value) * M, (height, width))
-		# 	cv2.imshow("test", img)
-		# 	cv2.waitKey(2)
-
-
+			cv2.waitKey(1)
 		for n in range(1, max_rotation_angle):
-			big = 1 - (n/max_rotation_angle)
-			small = (n/max_rotation_angle)
-			newImage = (big*img_1) + (small*img_2)
+			new_n = max_rotation_angle - n
+			# big = 1 - (n/max_rotation_angle)
+			# small = (n/max_rotation_angle)
+			# newImage = (big*img_0) + (small*img_1)
 			rows = img_0.shape[0]
 			cols = img_0.shape[1]
 			# Image 0
 			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
-			img_trans_0 = cv2.warpAffine(newImage, M_0, (cols,rows))
+			img_trans_0 = cv2.warpAffine(img_1, (new_n/max_rotation_angle) * M_0, (cols,rows))
 			cv2.imshow("test", img_trans_0)
-			cv2.waitKey(2)
+			cv2.waitKey(1)
 		for n in range(1, max_rotation_angle):
-			big = 1 - (n/max_rotation_angle)
-			small = (n/max_rotation_angle)
-			newImage = (big*img_2) + (small*img_3)
+			# new_n = max_rotation_angle - n
+			# big = 1 - (n/max_rotation_angle)
+			# small = (n/max_rotation_angle)
+			# newImage = (big*img_0) + (small*img_1)
 			rows = img_0.shape[0]
 			cols = img_0.shape[1]
 			# Image 0
 			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
-			img_trans_0 = cv2.warpAffine(newImage, M_0, (cols,rows))
+			img_trans_0 = cv2.warpAffine(img_2, (n/max_rotation_angle) * M_0, (cols,rows))
 			cv2.imshow("test", img_trans_0)
-			cv2.waitKey(2)
+			cv2.waitKey(1)
 		for n in range(1, max_rotation_angle):
-			big = 1 - (n/max_rotation_angle)
-			small = (n/max_rotation_angle)
-			newImage = (big*img_3) + (small*img_0)
+			new_n = max_rotation_angle - n
+			# big = 1 - (n/max_rotation_angle)
+			# small = (n/max_rotation_angle)
+			# newImage = (big*img_0) + (small*img_1)
 			rows = img_0.shape[0]
 			cols = img_0.shape[1]
 			# Image 0
 			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
-			img_trans_0 = cv2.warpAffine(newImage, M_0, (cols,rows))
+			img_trans_0 = cv2.warpAffine(img_2, (new_n/max_rotation_angle) * M_0, (cols,rows))
 			cv2.imshow("test", img_trans_0)
-			cv2.waitKey(2)
+			cv2.waitKey(1)
+		for n in range(1, max_rotation_angle):
+			# new_n = max_rotation_angle - n
+			# big = 1 - (n/max_rotation_angle)
+			# small = (n/max_rotation_angle)
+			# newImage = (big*img_0) + (small*img_1)
+			rows = img_0.shape[0]
+			cols = img_0.shape[1]
+			# Image 0
+			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
+			img_trans_0 = cv2.warpAffine(img_3, (n/max_rotation_angle) * M_0, (cols,rows))
+			cv2.imshow("test", img_trans_0)
+			cv2.waitKey(1)
+		for n in range(1, max_rotation_angle):
+			new_n = max_rotation_angle - n
+			# big = 1 - (n/max_rotation_angle)
+			# small = (n/max_rotation_angle)
+			# newImage = (big*img_0) + (small*img_1)
+			rows = img_0.shape[0]
+			cols = img_0.shape[1]
+			# Image 0
+			M_0 = cv2.getRotationMatrix2D((cols/2,rows/2),n,1)
+			img_trans_0 = cv2.warpAffine(img_3, (new_n/max_rotation_angle) * M_0, (cols,rows))
+			cv2.imshow("test", img_trans_0)
+			cv2.waitKey(1)
 
 
 # def flip(img_0, img_1, img_2, img_3):
@@ -271,10 +299,13 @@ def rotationScaling(img_0, img_1, img_2, img_3, max_rotation_angle, speed):
 
 
 # Importing images.
-img_0 = numpy.array(cv2.imread("0.jpeg"))
-img_1 = numpy.array(cv2.imread("1.jpeg"))
+# img_0 = numpy.array(cv2.imread("0.jpeg"))
+# img_1 = numpy.array(cv2.imread("1.jpeg"))
 img_2 = numpy.array(cv2.imread("2.jpeg"))
 img_3 = numpy.array(cv2.imread("3.jpeg"))
+
+img_0 = numpy.array(cv2.imread("emoji1.png"))
+img_1 = numpy.array(cv2.imread("emoji2.png"))
 
 # First image width and height.
 width = img_0.shape[0]
@@ -292,7 +323,7 @@ img_3 = cv2.normalize(img_3.astype(float), alpha=0, beta=1, norm_type=cv2.NORM_M
 #fade(img_0, img_1, img_2, img_3, 60)
 #rotation(img_0, img_1, img_2, img_3, 360, 10)
 #flip(img_0, img_1, img_2, img_3)
-#scaling(img_0, img_1, img_2, img_3)
+scaling(img_0, img_1, img_2, img_3)
 #fadeRotation(img_0, img_1, img_2, img_3, 360, 10)
-rotationScaling(img_0, img_1, img_2, img_3, 360, 10)
+#rotationScaling(img_0, img_1, img_2, img_3, 360, 10)
 
